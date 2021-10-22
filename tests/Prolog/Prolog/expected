@@ -1,0 +1,13 @@
+
+---
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Some comment -->
+---
+<!DOCTYPE html>
+<!-- Some comment -->
+---
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Some comment -->
+<?php Some PHP code ?>
+<!DOCTYPE html>
+<!-- Another comment -->

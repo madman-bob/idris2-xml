@@ -1,0 +1,8 @@
+package xml-tests
+
+sourcedir = "."
+
+depends = contrib, test
+
+main = XMLTests
+executable = xml-tests

@@ -1,0 +1,17 @@
+<p class="article">
+    Lorem ipsum, dolor sit amet
+</p>
+---
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Some comment -->
+<?php Some PHP code ?>
+<!DOCTYPE html>
+<!-- Another comment -->
+<p class="article">
+    Lorem ipsum, dolor
+    <em>
+        sit
+    </em>
+    amet
+</p>
+<!-- Yet another comment -->
