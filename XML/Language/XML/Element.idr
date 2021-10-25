@@ -7,10 +7,11 @@ import Data.String.Extra
 import Data.String.Parser
 
 import public Language.XML.Attribute
+import public Language.XML.Name
 
 public export
-data Element = EmptyElem String (List Attribute)
-             | Elem String (List Attribute) (Odd (Maybe String) Element)
+data Element = EmptyElem QName (List Attribute)
+             | Elem QName (List Attribute) (Odd (Maybe String) Element)
 
 %name Element elem
 
@@ -24,12 +25,12 @@ indentLines str = unlines $ map indent $ lines str
 export
 Show Element where
     show (EmptyElem name attrs) =
-        "<\{name}\{concat $ map (\attr => " " ++ show attr) attrs}/>"
+        "<\{show name}\{concat $ map (\attr => " " ++ show attr) attrs}/>"
     show (Elem name attrs content) =
         """
-        <\{name}\{concat $ map (\attr => " " ++ show attr) attrs}>\
+        <\{show name}\{concat $ map (\attr => " " ++ show attr) attrs}>\
         \{indentLines $ concat $ map ("\n" ++) $ catMaybes $ forget $ mapSnd (Just . show) content}\
-        </\{name}>
+        </\{show name}>
         """
 
 export
@@ -44,7 +45,7 @@ export
 element : Parser Element
 element = (do
     ignore $ string "<"
-    name <- pack <$> many letter
+    name <- qName
     attrs <- many (spaces *> attribute)
     spaces
     Nothing <- optional $ string "/>"
@@ -53,7 +54,7 @@ element = (do
 
     content <- alternating charData element
 
-    string "</\{name}" *> spaces <* string ">"
+    string "</\{show name}" *> spaces <* string ">"
 
     pure $ Elem name attrs content
   ) <?> "XML element"

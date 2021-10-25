@@ -7,8 +7,8 @@ main = do
     printLn $ MkXMLDocument
         (MkXMLProlog Nothing [] Nothing [])
         (Elem
-            "p"
-            [MkAttribute "class" "article"]
+            (MkQName Nothing (MkName "p"))
+            [MkAttribute (MkQName Nothing (MkName "class")) "article"]
             [Just "Lorem ipsum, dolor sit amet"])
         []
 
@@ -21,17 +21,17 @@ main = do
             (Just $ MkDocType "html" Nothing)
             [Comment " Another comment "])
         (Elem
-            "p"
-            [MkAttribute "class" "article"]
-            [Just "Lorem ipsum, dolor", Elem "em" [] [Just "sit"], Just "amet"])
+            (MkQName Nothing (MkName "p"))
+            [MkAttribute (MkQName Nothing (MkName "class")) "article"]
+            [Just "Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] [Just "sit"], Just "amet"])
         [Comment " Yet another comment "]
 
     let Right (
             MkXMLDocument
                 (MkXMLProlog Nothing [] Nothing [])
                 (Elem
-                    "p"
-                    [MkAttribute "class" "article"]
+                    (MkQName Nothing (MkName "p"))
+                    [MkAttribute (MkQName Nothing (MkName "class")) "article"]
                     [Just "Lorem ipsum, dolor sit amet"])
                 [],
             50
@@ -46,9 +46,9 @@ main = do
                     (Just $ MkDocType "html" Nothing)
                     [Comment " Another comment "])
                 (Elem
-                    "p"
-                    [MkAttribute "class" "article"]
-                    [Just "Lorem ipsum, dolor", Elem "em" [] [Just "sit"], Just "amet"])
+                    (MkQName Nothing (MkName "p"))
+                    [MkAttribute (MkQName Nothing (MkName "class")) "article"]
+                    [Just "Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] [Just "sit"], Just "amet"])
                 [Comment " Yet another comment "],
             229
             ) = parse xmlDocument

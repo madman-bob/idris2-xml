@@ -9,6 +9,7 @@ modules =
     Language.XML.Attribute,
     Language.XML.Element,
     Language.XML.Misc,
+    Language.XML.Name,
     Language.XML.Prolog,
     Language.XML.Prolog.DocType,
     Language.XML.Prolog.XMLDecl

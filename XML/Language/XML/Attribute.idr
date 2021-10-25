@@ -2,17 +2,19 @@ module Language.XML.Attribute
 
 import Data.String.Parser
 
+import public Language.XML.Name
+
 public export
 record Attribute where
     constructor MkAttribute
-    name : String
+    name : QName
     value : String
 
 %name Attribute attr
 
 export
 Show Attribute where
-    show attr = "\{attr.name}=\{show attr.value}"
+    show attr = "\{show attr.name}=\{show attr.value}"
 
 export
 quotedString : Parser String
@@ -25,7 +27,7 @@ quotedString = do
 export
 attribute : Parser Attribute
 attribute = (do
-    name <- pack <$> many letter
+    name <- qName
     spaces
     ignore $ string "="
     spaces
@@ -34,7 +36,7 @@ attribute = (do
   ) <?> "XML attribute"
 
 export
-exactAttribute : String -> Parser String
+exactAttribute : QName -> Parser String
 exactAttribute expectedName = do
     MkAttribute name value <- attribute
     if name == expectedName

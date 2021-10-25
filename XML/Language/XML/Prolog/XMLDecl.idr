@@ -27,9 +27,9 @@ xmlDecl : Parser XMLDecl
 xmlDecl = (do
     ignore $ string "<?xml"
     spaces1
-    version <- exactAttribute "version"
-    encoding <- optional (spaces *> exactAttribute "encoding")
-    standalone <- case !(optional (spaces *> exactAttribute "standalone")) of
+    version <- exactAttribute $ MkQName Nothing $ MkName "version"
+    encoding <- optional (spaces *> exactAttribute (MkQName Nothing $ MkName "encoding"))
+    standalone <- case !(optional (spaces *> exactAttribute (MkQName Nothing $ MkName "standalone"))) of
           Just "yes" => pure $ Just True
           Just "no" => pure $ Just False
           Nothing => pure Nothing
