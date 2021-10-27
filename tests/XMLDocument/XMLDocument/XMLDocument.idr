@@ -9,7 +9,7 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            [Just "Lorem ipsum, dolor sit amet"])
+            ["Lorem ipsum, dolor sit amet"])
         []
 
     putStrLn "---"
@@ -23,7 +23,7 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            [Just "Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] [Just "sit"], Just "amet"])
+            ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"])
         [Comment " Yet another comment "]
 
     let Right (
@@ -32,7 +32,7 @@ main = do
                 (Elem
                     (MkQName Nothing (MkName "p"))
                     [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-                    [Just "Lorem ipsum, dolor sit amet"])
+                    ["Lorem ipsum, dolor sit amet"])
                 [],
             50
             ) = parse xmlDocument #"<p class="article">Lorem ipsum, dolor sit amet</p>"#
@@ -48,7 +48,7 @@ main = do
                 (Elem
                     (MkQName Nothing (MkName "p"))
                     [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-                    [Just "Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] [Just "sit"], Just "amet"])
+                    ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"])
                 [Comment " Yet another comment "],
             229
             ) = parse xmlDocument

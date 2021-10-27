@@ -14,7 +14,7 @@ miscTests = MkTestPool "Misc" [] Nothing [
 
 documentTests : TestPool
 documentTests = MkTestPool "XMLDocument" [] Nothing [
-    "Element", "Name", "XMLDocument"
+    "CharData", "Element", "Name", "XMLDocument"
   ]
 
 main : IO ()
