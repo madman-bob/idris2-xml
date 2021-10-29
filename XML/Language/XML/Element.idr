@@ -15,6 +15,26 @@ data Element = EmptyElem QName (List Attribute)
 
 %name Element elem
 
+public export
+(.name) : Element -> QName
+(EmptyElem name _).name = name
+(Elem name _ _).name = name
+
+public export
+(.attrs) : Element -> List Attribute
+(EmptyElem _ attrs).attrs = attrs
+(Elem _ attrs _).attrs = attrs
+
+public export
+(.content) : Element -> Odd CharData Element
+(EmptyElem _ _).content = [""]
+(Elem _ _ content).content = content
+
+public export
+mapContent : (Odd CharData Element -> Odd CharData Element) -> Element -> Element
+mapContent f (EmptyElem name attrs) = EmptyElem name attrs
+mapContent f (Elem name attrs content) = Elem name attrs (f content)
+
 indentLines : String -> String
 indentLines str = unlines $ map indent $ lines str
   where

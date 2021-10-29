@@ -18,6 +18,10 @@ record XMLDocument where
 
 %name XMLDocument doc
 
+public export
+mapContent : (Element -> Element) -> XMLDocument -> XMLDocument
+mapContent f (MkXMLDocument prolog root misc) = MkXMLDocument prolog (f root) misc
+
 export
 Show XMLDocument where
     show doc = join "\n" $ filter (/= "") $
