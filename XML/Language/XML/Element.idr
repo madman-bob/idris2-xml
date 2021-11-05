@@ -49,7 +49,7 @@ Show Element where
     show (Elem name attrs content) =
         """
         <\{show name}\{concat $ map (\attr => " " ++ show attr) attrs}>\
-        \{indentLines $ concat $ map ("\n" ++) $ catMaybes $ forget $ bimap (.content) (Just . show) content}\
+        \{indentLines $ concat $ map ("\n" ++) $ catMaybes $ forget $ assert_total $ bimap (.content) (Just . show) content}\
         </\{show name}>
         """
 
