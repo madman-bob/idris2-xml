@@ -15,6 +15,7 @@ main = do
     printLn body
     printLn p
 
+    printLn $ lookup (MkQName Nothing $ MkName "src") img.attrs
     printLn $ find (\elem => elem.name == MkQName Nothing (MkName "em")) p
 
     let Right (EmptyElem (MkQName Nothing (MkName "br")) [], 5) = parse element "<br/>"

@@ -1,5 +1,6 @@
 module Language.XML.Attribute
 
+import Data.List
 import Data.String.Parser
 
 import public Language.XML.Name
@@ -11,6 +12,10 @@ record Attribute where
     value : String
 
 %name Attribute attr
+
+public export
+lookup : (name : QName) -> List Attribute -> Maybe String
+lookup name attrs = lookup name $ map (\attr => (attr.name, attr.value)) attrs
 
 export
 Show Attribute where
