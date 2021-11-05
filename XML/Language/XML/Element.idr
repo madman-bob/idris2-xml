@@ -31,6 +31,10 @@ public export
 (Elem _ _ content).content = content
 
 public export
+find : (Element -> Bool) -> Element -> Maybe Element
+find f elem = find f (evens elem.content)
+
+public export
 mapContent : (Odd CharData Element -> Odd CharData Element) -> Element -> Element
 mapContent f (EmptyElem name attrs) = EmptyElem name attrs
 mapContent f (Elem name attrs content) = Elem name attrs (f content)
