@@ -3,6 +3,7 @@ module Language.XML.Element
 import Data.List
 import public Data.List.Alternating
 import Data.String
+import Data.String.Extra
 import Data.String.Parser
 
 import public Language.XML.Attribute
@@ -29,6 +30,11 @@ public export
 (.content) : Element -> Odd CharData Element
 (EmptyElem _ _).content = [""]
 (Elem _ _ content).content = content
+
+public export
+textContent : Element -> String
+textContent (EmptyElem name attrs) = ""
+textContent (Elem name attrs content) = join "\n" $ forget $ bimap show textContent content
 
 public export
 find : (Element -> Bool) -> Element -> Maybe Element

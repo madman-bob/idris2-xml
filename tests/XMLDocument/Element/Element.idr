@@ -15,6 +15,9 @@ main = do
     printLn body
     printLn p
 
+    putStrLn $ textContent img
+    putStrLn $ textContent p
+
     printLn $ lookup (MkQName Nothing $ MkName "src") img.attrs
     printLn $ find (\elem => elem.name == MkQName Nothing (MkName "em")) p
 
