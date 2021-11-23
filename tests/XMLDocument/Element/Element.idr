@@ -21,6 +21,10 @@ main = do
     printLn $ lookup (MkQName Nothing $ MkName "src") img.attrs
     printLn $ find (\elem => elem.name == MkQName Nothing (MkName "em")) p
 
+    printLn $ deEmphasize p -- Tests mapContent
+    printLn $ maybeDeEmphasize True p -- Tests mapContentM
+    printLn $ maybeDeEmphasize False p -- Tests mapContentM
+
     let Right (EmptyElem (MkQName Nothing (MkName "br")) [], 5) = parse element "<br/>"
         | fail => putStrLn "Error parsing XML element, got \{show fail}"
 
@@ -68,3 +72,20 @@ main = do
         | fail => putStrLn "Error parsing XML element, got \{show fail}"
 
     pure ()
+  where
+    deEmphasize : Element -> Element
+    deEmphasize = mapContent \content => Snd.do
+        elem <- map deEmphasize content
+        case show elem.name of
+            "em" => elem.content
+            _ => pure elem
+
+    maybeDeEmphasize : Bool -> Element -> Maybe Element
+    maybeDeEmphasize ok = mapContentM \contents => (do
+        Just elem <- Just $ map (maybeDeEmphasize ok) contents
+            | Nothing => Nothing
+        case (ok, show elem.name) of
+             (False, "em") => Nothing
+             (True, "em") => Just $ elem.content
+             (_, _) => Just $ pure elem
+      ) @{Compose @{(%search, SndMonad, %search)}}

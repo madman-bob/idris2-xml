@@ -45,6 +45,11 @@ mapContent : (Odd CharData Element -> Odd CharData Element) -> Element -> Elemen
 mapContent f (EmptyElem name attrs) = EmptyElem name attrs
 mapContent f (Elem name attrs content) = Elem name attrs (f content)
 
+public export
+mapContentM : Monad m => (Odd CharData Element -> m (Odd CharData Element)) -> Element -> m Element
+mapContentM f (EmptyElem name attrs) = pure $ EmptyElem name attrs
+mapContentM f (Elem name attrs content) = pure $ Elem name attrs !(f content)
+
 indentLines : String -> String
 indentLines str = unlines $ map indent $ lines str
   where
