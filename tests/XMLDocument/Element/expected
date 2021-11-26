@@ -1,24 +1,20 @@
 <br/>
 <br></br>
 <img align="left" src="https://www.w3.org/Icons/w3c_home"/>
-<body>
-    <hr/>
-</body>
+<body><hr/></body>
 <p class="article">
     Lorem ipsum, dolor
-    <em>
-        sit
-    </em>
+    <em>sit</em>
     amet
 </p>
+
 
 Lorem ipsum, dolor
 sit
 amet
+
 Just "https://www.w3.org/Icons/w3c_home"
-Just <em>
-    sit
-</em>
+Just <em>sit</em>
 <p class="article">
     Lorem ipsum, dolor sit amet
 </p>

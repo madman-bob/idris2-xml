@@ -19,7 +19,9 @@ main = do
             <?php Some PHP code ?>
             <!DOCTYPE html>
             <!-- Another comment -->
-            <p class="article">Lorem ipsum, dolor <em>sit</em> amet</p>
+            <p class="article">
+                Lorem ipsum, dolor <em>sit</em> amet
+            </p>
             <!-- Yet another comment -->
             """
         | err => printLn err
@@ -37,7 +39,7 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"])
+            [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "])
         [Comment " Yet another comment "]
 
     deEmphasize : Element -> Element

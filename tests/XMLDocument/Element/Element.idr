@@ -9,7 +9,7 @@ main = do
 
     let img = EmptyElem (MkQName Nothing (MkName "img")) [MkAttribute (MkQName Nothing (MkName "align")) "left", MkAttribute (MkQName Nothing (MkName "src")) "https://www.w3.org/Icons/w3c_home"]
     let body = Elem (MkQName Nothing (MkName "body")) [] ["", EmptyElem (MkQName Nothing (MkName "hr")) [], ""]
-    let p = Elem (MkQName Nothing (MkName "p")) [MkAttribute (MkQName Nothing (MkName "class")) "article"] ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"]
+    let p = Elem (MkQName Nothing (MkName "p")) [MkAttribute (MkQName Nothing (MkName "class")) "article"] [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "]
 
     printLn img
     printLn body
@@ -44,12 +44,10 @@ main = do
                 (MkQName Nothing (MkName "body"))
                 []
                 ["", EmptyElem (MkQName Nothing (MkName "hr")) [], ""],
-            24
+            18
             ) = parse element
                 """
-                <body>
-                    <hr/>
-                </body>
+                <body><hr/></body>
                 """
         | fail => putStrLn "Error parsing XML element, got \{show fail}"
 
@@ -57,15 +55,13 @@ main = do
             Elem
                 (MkQName Nothing (MkName "p"))
                 [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-                ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"],
-            87
+                [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "],
+            73
             ) = parse element
                     """
                     <p class="article">
                         Lorem ipsum, dolor
-                        <em>
-                            sit
-                        </em>
+                        <em>sit</em>
                         amet
                     </p>
                     """

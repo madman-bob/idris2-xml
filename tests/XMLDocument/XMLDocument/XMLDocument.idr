@@ -9,7 +9,7 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            ["Lorem ipsum, dolor sit amet"])
+            [" Lorem ipsum, dolor sit amet "])
         []
 
     putStrLn "---"
@@ -23,7 +23,7 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"])
+            [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "])
         [Comment " Yet another comment "]
 
     let Right (
@@ -48,9 +48,9 @@ main = do
                 (Elem
                     (MkQName Nothing (MkName "p"))
                     [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-                    ["Lorem ipsum, dolor", Elem (MkQName Nothing (MkName "em")) [] ["sit"], "amet"])
+                    [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "])
                 [Comment " Yet another comment "],
-            229
+            235
             ) = parse xmlDocument
                     """
                     <?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -58,7 +58,9 @@ main = do
                     <?php Some PHP code ?>
                     <!DOCTYPE html>
                     <!-- Another comment -->
-                    <p class="article">Lorem ipsum, dolor <em>sit</em> amet</p>
+                    <p class="article">
+                        Lorem ipsum, dolor <em>sit</em> amet
+                    </p>
                     <!-- Yet another comment -->
                     """
         | fail => putStrLn "Error parsing XML document, got \{show fail}"

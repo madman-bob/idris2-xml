@@ -1,6 +1,6 @@
 module Language.XML.Element
 
-import Data.List
+import Data.List1
 import public Data.List.Alternating
 import Data.String
 import Data.String.Extra
@@ -32,9 +32,18 @@ public export
 (Elem _ _ content).content = content
 
 public export
+maybeNl : Bool -> String
+maybeNl False = ""
+maybeNl True = "\n"
+
+public export
+showNl : CharData -> String
+showNl (MkCharData preSpace c postSpace) = maybeNl preSpace ++ c ++ maybeNl postSpace
+
+public export
 textContent : Element -> String
 textContent (EmptyElem name attrs) = ""
-textContent (Elem name attrs content) = join "\n" $ forget $ bimap show textContent content
+textContent (Elem name attrs content) = concat $ forget $ bimap showNl textContent content
 
 public export
 find : (Element -> Bool) -> Element -> Maybe Element
@@ -50,8 +59,10 @@ mapContentM : Monad m => (Odd CharData Element -> m (Odd CharData Element)) -> E
 mapContentM f (EmptyElem name attrs) = pure $ EmptyElem name attrs
 mapContentM f (Elem name attrs content) = pure $ Elem name attrs !(f content)
 
-indentLines : String -> String
-indentLines str = unlines $ map indent $ lines str
+indentTail : String -> String
+indentTail str =
+    let (x ::: xs) = split (== '\n') str in
+    join "\n" (x :: map indent xs)
   where
     indent : String -> String
     indent "" = ""
@@ -64,7 +75,7 @@ Show Element where
     show (Elem name attrs content) =
         """
         <\{show name}\{concat $ map (\attr => " " ++ show attr) attrs}>\
-        \{indentLines $ concat $ map ("\n" ++) $ catMaybes $ forget $ assert_total $ bimap (.content) (Just . show) content}\
+        \{indentTail $ concat $ forget $ assert_total $ bimap showNl show content}\
         </\{show name}>
         """
 

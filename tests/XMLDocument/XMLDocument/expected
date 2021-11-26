@@ -9,9 +9,7 @@
 <!-- Another comment -->
 <p class="article">
     Lorem ipsum, dolor
-    <em>
-        sit
-    </em>
+    <em>sit</em>
     amet
 </p>
 <!-- Yet another comment -->
