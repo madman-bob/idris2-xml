@@ -23,7 +23,7 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "])
+            [" Lorem ipsum, dolor ", Right (Elem (MkQName Nothing (MkName "em")) [] ["sit"]), " amet "])
         [Comment " Yet another comment "]
 
     let Right (
@@ -48,7 +48,7 @@ main = do
                 (Elem
                     (MkQName Nothing (MkName "p"))
                     [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-                    [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "])
+                    [" Lorem ipsum, dolor ", Right (Elem (MkQName Nothing (MkName "em")) [] ["sit"]), " amet "])
                 [Comment " Yet another comment "],
             235
             ) = parse xmlDocument

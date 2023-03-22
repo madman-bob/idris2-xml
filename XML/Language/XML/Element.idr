@@ -1,5 +1,6 @@
 module Language.XML.Element
 
+import Data.Either
 import Data.List1
 import public Data.List.Alternating
 import Data.String
@@ -8,11 +9,12 @@ import Data.String.Parser
 
 import public Language.XML.Attribute
 import public Language.XML.CharData
+import public Language.XML.Misc
 import public Language.XML.Name
 
 public export
 data Element = EmptyElem QName (List Attribute)
-             | Elem QName (List Attribute) (Odd CharData Element)
+             | Elem QName (List Attribute) (Odd CharData $ Either Misc Element)
 
 %name Element elem
 
@@ -27,7 +29,7 @@ public export
 (Elem _ attrs _).attrs = attrs
 
 public export
-(.content) : Element -> Odd CharData Element
+(.content) : Element -> Odd CharData (Either Misc Element)
 (EmptyElem _ _).content = [""]
 (Elem _ _ content).content = content
 
@@ -43,19 +45,20 @@ showNl (MkCharData preSpace c postSpace) = maybeNl preSpace ++ c ++ maybeNl post
 public export
 textContent : Element -> String
 textContent (EmptyElem name attrs) = ""
-textContent (Elem name attrs content) = concat $ forget $ bimap showNl textContent content
+textContent (Elem name attrs content) = concat $ Odd.forget $
+    bimap showNl textContent $ content >>= either (const neutral) pure
 
 public export
 find : (Element -> Bool) -> Element -> Maybe Element
-find f elem = find f (evens elem.content)
+find f elem = find f (rights $ evens elem.content)
 
 public export
-mapContent : (Odd CharData Element -> Odd CharData Element) -> Element -> Element
+mapContent : (Odd CharData (Either Misc Element) -> Odd CharData (Either Misc Element)) -> Element -> Element
 mapContent f (EmptyElem name attrs) = EmptyElem name attrs
 mapContent f (Elem name attrs content) = Elem name attrs (f content)
 
 public export
-mapContentM : Monad m => (Odd CharData Element -> m (Odd CharData Element)) -> Element -> m Element
+mapContentM : Monad m => (Odd CharData (Either Misc Element) -> m (Odd CharData (Either Misc Element))) -> Element -> m Element
 mapContentM f (EmptyElem name attrs) = pure $ EmptyElem name attrs
 mapContentM f (Elem name attrs content) = pure $ Elem name attrs !(f content)
 
@@ -75,7 +78,7 @@ Show Element where
     show (Elem name attrs content) =
         """
         <\{show name}\{concat $ map (\attr => " " ++ show attr) attrs}>\
-        \{indentTail $ concat $ forget $ assert_total $ bimap showNl show content}\
+        \{indentTail $ concat $ forget $ assert_total $ bimap showNl (either show show) content}\
         </\{show name}>
         """
 
@@ -90,7 +93,7 @@ element = (do
         | Just _ => pure $ EmptyElem name attrs
     ignore $ string ">"
 
-    content <- alternating charData element
+    content <- alternating charData $ map Left misc <|> map Right element
 
     string "</\{show name}" *> spaces <* string ">"
 

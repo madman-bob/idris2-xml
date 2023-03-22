@@ -39,12 +39,13 @@ main = do
         (Elem
             (MkQName Nothing (MkName "p"))
             [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-            [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "])
+            [" Lorem ipsum, dolor ", Right (Elem (MkQName Nothing (MkName "em")) [] ["sit"]), " amet "])
         [Comment " Yet another comment "]
 
     deEmphasize : Element -> Element
     deEmphasize = mapContent $ \content => Snd.do
-        elem <- map deEmphasize content
+        Right elem <- map (map deEmphasize) content
+            | Left misc => pure $ Left misc
         case show elem.name of
             "em" => elem.content
-            _ => pure elem
+            _ => pure $ Right elem

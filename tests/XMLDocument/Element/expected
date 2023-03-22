@@ -6,6 +6,7 @@
     Lorem ipsum, dolor
     <em>sit</em>
     amet
+    <!-- consectetur adipiscing elit -->
 </p>
 
 
@@ -17,8 +18,10 @@ Just "https://www.w3.org/Icons/w3c_home"
 Just <em>sit</em>
 <p class="article">
     Lorem ipsum, dolor sit amet
+    <!-- consectetur adipiscing elit -->
 </p>
 Just <p class="article">
     Lorem ipsum, dolor sit amet
+    <!-- consectetur adipiscing elit -->
 </p>
 Nothing

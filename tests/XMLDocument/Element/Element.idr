@@ -8,8 +8,8 @@ main = do
     printLn $ Elem (MkQName Nothing (MkName "br")) [] [""]
 
     let img = EmptyElem (MkQName Nothing (MkName "img")) [MkAttribute (MkQName Nothing (MkName "align")) "left", MkAttribute (MkQName Nothing (MkName "src")) "https://www.w3.org/Icons/w3c_home"]
-    let body = Elem (MkQName Nothing (MkName "body")) [] ["", EmptyElem (MkQName Nothing (MkName "hr")) [], ""]
-    let p = Elem (MkQName Nothing (MkName "p")) [MkAttribute (MkQName Nothing (MkName "class")) "article"] [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "]
+    let body = Elem (MkQName Nothing (MkName "body")) [] ["", Right (EmptyElem (MkQName Nothing (MkName "hr")) []), ""]
+    let p = Elem (MkQName Nothing (MkName "p")) [MkAttribute (MkQName Nothing (MkName "class")) "article"] [" Lorem ipsum, dolor ", Right (Elem (MkQName Nothing (MkName "em")) [] ["sit"]), " amet ", Left (Comment " consectetur adipiscing elit "), " "]
 
     printLn img
     printLn body
@@ -43,7 +43,7 @@ main = do
             Elem
                 (MkQName Nothing (MkName "body"))
                 []
-                ["", EmptyElem (MkQName Nothing (MkName "hr")) [], ""],
+                ["", Right (EmptyElem (MkQName Nothing (MkName "hr")) []), ""],
             18
             ) = parse element
                 """
@@ -55,14 +55,15 @@ main = do
             Elem
                 (MkQName Nothing (MkName "p"))
                 [MkAttribute (MkQName Nothing (MkName "class")) "article"]
-                [" Lorem ipsum, dolor ", Elem (MkQName Nothing (MkName "em")) [] ["sit"], " amet "],
-            73
+                [" Lorem ipsum, dolor ", Right (Elem (MkQName Nothing (MkName "em")) [] ["sit"]), " amet ", Left (Comment " consectetur adipiscing elit "), " "],
+            114
             ) = parse element
                     """
                     <p class="article">
                         Lorem ipsum, dolor
                         <em>sit</em>
                         amet
+                        <!-- consectetur adipiscing elit -->
                     </p>
                     """
         | fail => putStrLn "Error parsing XML element, got \{show fail}"
@@ -71,17 +72,19 @@ main = do
   where
     deEmphasize : Element -> Element
     deEmphasize = mapContent \content => Snd.do
-        elem <- map deEmphasize content
+        Right elem <- map (map deEmphasize) content
+            | Left misc => pure $ Left misc
         case show elem.name of
             "em" => elem.content
-            _ => pure elem
+            _ => pure $ Right elem
 
     maybeDeEmphasize : Bool -> Element -> Maybe Element
     maybeDeEmphasize ok = mapContentM \contents => (do
-        Just elem <- Just $ map (maybeDeEmphasize ok) contents
-            | Nothing => Nothing
+        Right (Just elem) <- Just $ map (map $ maybeDeEmphasize ok) contents
+            | Right Nothing => Nothing
+            | Left misc => Just $ pure $ Left misc
         case (ok, show elem.name) of
-             (False, "em") => Nothing
-             (True, "em") => Just $ elem.content
-             (_, _) => Just $ pure elem
-      ) @{Compose @{(%search, SndMonad, %search)}}
+            (False, "em") => Nothing
+            (True, "em") => Just elem.content
+            (_, _) => Just $ pure $ Right elem
+        ) @{Compose @{%search} @{SndMonad}}
