@@ -1,5 +1,7 @@
 package xml
 
+version = 1.0
+
 sourcedir = "XML"
 
 depends = contrib
